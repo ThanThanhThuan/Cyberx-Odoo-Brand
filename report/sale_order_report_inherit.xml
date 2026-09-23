@@ -2,11 +2,6 @@
 <odoo>
   <template id="report_saleorder_document_inherit_cyberaxial"
     inherit_id="sale.report_saleorder_document">
-    <!-- Replace layout call -->
-    <xpath expr="//t[@t-call='web.external_layout']" position="attributes">
-      <attribute name="t-call">cyberaxial_report_branding.external_layout</attribute>
-    </xpath>
-
     <!-- Dynamic title -->
     <xpath expr="//t[@t-set='layout_document_title']" position="replace">
       <t t-set="layout_document_title">
