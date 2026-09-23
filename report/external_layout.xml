@@ -7,37 +7,33 @@
   <template id="external_layout" inherit_id="web.external_layout_standard">
     <!-- HEADER -->
     <xpath expr="//div[contains(@t-attf-class,'header')]" position="replace">
-      <div class="header">
-        <t t-set="company"
-          t-value="doc and ('company_id' in doc and doc.company_id or False) or res_company" />
-        <t t-set="brand"
-          t-value="doc and (('brand_id' in doc and doc.brand_id) or (company and doc.env['cyberaxial.brand'].search([('company_id', '=', company.id)], limit=1))) or False" />
-        <div class="row align-items-center">
-          <div class="col-8">
-            <div class="d-flex align-items-center flex-wrap gap-2">
-              <t t-if="brand and brand.logo_large">
-                <img t-att-src="image_data_uri(brand.logo_large)" style="max-height: 60px;" />
-              </t>
-              <t t-if="brand and brand.logo_small">
-                <img t-att-src="image_data_uri(brand.logo_small)" style="max-height: 40px;" />
-              </t>
-              <t t-if="brand and brand.footer_logo">
-                <img t-att-src="image_data_uri(brand.footer_logo)" style="max-height: 30px;" />
-              </t>
-              <t
-                t-if="not (brand and (brand.logo_large or brand.logo_small or brand.footer_logo)) and company and company.logo">
-                <img t-att-src="image_data_uri(company.logo)" style="max-height: 55px;" />
-              </t>
-            </div>
-            <div t-if="brand and brand.tagline" class="mt-1 text-muted">
-              <small t-esc="brand.tagline" />
-            </div>
+      <div t-attf-class="header o_company_#{company.id}_layout">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <t t-set="company"
+            t-value="doc and ('company_id' in doc and doc.company_id or False) or res_company" />
+          <t t-set="brand"
+            t-value="doc and (('brand_id' in doc and doc.brand_id) or (company and doc.env['cyberaxial.brand'].search([('company_id', '=', company.id)], limit=1))) or False" />
+          <div class="d-flex align-items-center flex-wrap gap-2">
+            <t t-if="brand and brand.logo_large">
+              <img t-att-src="image_data_uri(brand.logo_large)" style="max-height: 60px;" />
+            </t>
+            <t t-if="brand and brand.logo_small">
+              <img t-att-src="image_data_uri(brand.logo_small)" style="max-height: 40px;" />
+            </t>
+            <t t-if="brand and brand.footer_logo">
+              <img t-att-src="image_data_uri(brand.footer_logo)" style="max-height: 30px;" />
+            </t>
+            <t
+              t-if="not (brand and (brand.logo_large or brand.logo_small or brand.footer_logo)) and company and company.logo">
+              <img t-att-src="image_data_uri(company.logo)" style="max-height: 55px;" />
+            </t>
           </div>
-
-          <div class="col-4 text-end">
-            <!-- Dynamic title (Quotation / Order / Invoice etc.) is handled in the document
-            template,
-                 but we also show a top-right document number if available -->
+          <div t-if="brand and brand.tagline" class="o_company_tagline mw-50 fw-bold text-end">
+            <span t-esc="brand.tagline" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 text-end">
             <div t-if="doc and doc.name">
               <strong t-esc="doc.name" />
             </div>
@@ -52,7 +48,7 @@
 
     <!-- FOOTER -->
     <xpath expr="//div[contains(@t-attf-class,'footer')]" position="replace">
-      <div class="footer">
+      <div t-attf-class="footer o_company_#{company.id}_layout {{report_type != 'pdf' and 'mt-auto'}}">
         <t t-set="company"
           t-value="doc and ('company_id' in doc and doc.company_id or False) or res_company" />
         <t t-set="brand"
