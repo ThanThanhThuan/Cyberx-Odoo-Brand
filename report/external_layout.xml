@@ -8,37 +8,51 @@
     <!-- HEADER -->
     <xpath expr="//div[contains(@t-attf-class,'header')]" position="replace">
       <div t-attf-class="header o_company_#{company.id}_layout">
+        <t t-set="company"
+          t-value="doc and ('company_id' in doc and doc.company_id or False) or res_company" />
+        <t t-set="brand"
+          t-value="doc and (('brand_id' in doc and doc.brand_id) or (company and doc.env['cyberaxial.brand'].search([('company_id', '=', company.id)], limit=1))) or False" />
+
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <t t-set="company"
-            t-value="doc and ('company_id' in doc and doc.company_id or False) or res_company" />
-          <t t-set="brand"
-            t-value="doc and (('brand_id' in doc and doc.brand_id) or (company and doc.env['cyberaxial.brand'].search([('company_id', '=', company.id)], limit=1))) or False" />
           <div class="d-flex align-items-center flex-wrap gap-2">
             <t t-if="brand and brand.logo_large">
               <img t-att-src="image_data_uri(brand.logo_large)" style="max-height: 60px;" />
             </t>
-            <t t-if="brand and brand.logo_small">
+            <t t-elif="brand and brand.logo_small">
               <img t-att-src="image_data_uri(brand.logo_small)" style="max-height: 40px;" />
             </t>
-            <t t-if="brand and brand.footer_logo">
+            <t t-elif="brand and brand.footer_logo">
               <img t-att-src="image_data_uri(brand.footer_logo)" style="max-height: 30px;" />
             </t>
-            <t
-              t-if="not (brand and (brand.logo_large or brand.logo_small or brand.footer_logo)) and company and company.logo">
-              <img t-att-src="image_data_uri(company.logo)" style="max-height: 55px;" />
+            <t t-elif="company and company.logo">
+              <img t-att-src="image_data_uri(company.logo)" class="o_company_logo_small" alt="Logo" />
             </t>
           </div>
           <div t-if="brand and brand.tagline" class="o_company_tagline mw-50 fw-bold text-end">
             <span t-esc="brand.tagline" />
           </div>
+          <div t-elif="company and company.report_header" class="o_company_tagline mw-50 fw-bold text-end">
+            <span t-field="company.report_header" />
+          </div>
         </div>
+
         <div class="row">
-          <div class="col-12 text-end">
+          <div class="col-6" name="company_address">
+            <ul class="list-unstyled" name="company_address_list">
+              <li t-if="brand and brand.header_html">
+                <t t-out="brand.header_html" />
+              </li>
+              <li t-elif="company and company.company_details">
+                <span t-field="company.company_details" />
+              </li>
+              <li t-else="">
+                <span t-field="company.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
+              </li>
+            </ul>
+          </div>
+          <div class="col-6 text-end">
             <div t-if="doc and doc.name">
               <strong t-esc="doc.name" />
-            </div>
-            <div t-if="brand and brand.header_html" class="mt-1">
-              <t t-out="brand.header_html" />
             </div>
           </div>
         </div>

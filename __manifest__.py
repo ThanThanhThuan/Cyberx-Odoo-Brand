@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Cyberaxial- Advanced PDF Branding (Odoo 19)",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.0.1",
     "category": "Sales/Reporting",
     "summary": "Advanced PDF report branding with custom external layout, headers/footers, dynamic titles",
     "web_icon": "cyberaxial_report_branding,static/description/icon.png",
