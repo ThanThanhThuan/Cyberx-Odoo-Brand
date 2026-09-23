@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+import logging
 from odoo import api, fields, models
+
+_logger = logging.getLogger(__name__)
 
 class CyberaxialBrand(models.Model):
     _name = "cyberaxial.brand"
@@ -86,6 +89,7 @@ class CyberaxialBrand(models.Model):
         tagline = company.report_header if company.report_header else company.name
         logo = company.logo if company.logo else False
 
+        _logger.info("Creating default brand for company '%s' (ID: %s)", company.name, company.id)
         return self.create({
             "name": company.name,
             "company_id": company.id,
@@ -100,6 +104,7 @@ class CyberaxialBrand(models.Model):
     def action_import_from_company(self):
         for brand in self:
             company = brand.company_id or self.env.company
+            _logger.info("Importing details from company '%s' (ID: %s) into brand '%s' (ID: %s)", company.name, company.id, brand.name, brand.id)
             partner = company.partner_id
 
             addr_lines = []
